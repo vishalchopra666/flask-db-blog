@@ -1,0 +1,22 @@
+{% extends "admin/layout.html" %}
+{% block title %}Cache{% endblock %}
+
+{% block content %}
+<h1>Cache Management</h1>
+
+<p>
+    Cached files: <strong>{{ cache_count }}</strong>
+</p>
+
+<form method="post" action="{{ url_for('admin.clear_cache_route') }}">
+    <input type="hidden" name="csrf_token" value="{{ config.CSRF_TOKEN }}">
+    <button class="btn btn-danger"
+            onclick="return confirm('Clear all cached pages?')">
+        Clear Cache
+    </button>
+</form>
+
+<p class="text-muted mt-3">
+    Cache is disk-based HTML. Admin pages are never cached.
+</p>
+{% endblock %}
