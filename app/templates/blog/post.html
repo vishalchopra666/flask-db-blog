@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "shared/seo_meta.html" %}
+
+</head>
+
+<body>
+
+<a href="{{ url_for('blog.home') }}">← Back</a>
+
+{% if post.featured_image_external %}
+    <img src="{{ post.featured_image_external }}"
+         alt="{{ post.image_alt or post.title }}"
+         style="max-width:100%;">
+{% elif post.featured_image %}
+    <img src="{{ url_for('static', filename='uploads/' + post.featured_image) }}"
+         alt="{{ post.image_alt or post.title }}"
+         style="max-width:100%;">
+{% endif %}
+
+
+<h1>{{ post.title }}</h1>
+
+<p>
+    <small>
+        Published on {{ post.created_at.strftime("%Y-%m-%d") }}
+    </small>
+</p>
+
+<div>
+    {{ post.content | safe }}
+
+    <br>
+    <hr>
+    {% if comments_embed %}
+        <hr>
+        <div class="comments-section">
+            {{ comments_embed | safe }}
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
