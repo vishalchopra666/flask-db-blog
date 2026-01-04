@@ -1,0 +1,28 @@
+{% extends "admin/layout.html" %}
+{% block title %}Categories{% endblock %}
+
+{% block content %}
+<h1>Categories</h1>
+
+<form method="post" class="mb-3">
+    <input type="hidden" name="csrf_token" value="{{ config.CSRF_TOKEN }}">
+
+    <input name="name" class="form-control" placeholder="Category name" required>
+    <button class="btn btn-primary mt-2">Add</button>
+</form>
+
+<ul class="list-group">
+{% for c in categories %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ c.name }}
+
+        <form method="post"
+              action="{{ url_for('admin.delete_category', category_id=c.id) }}"
+              onsubmit="return confirm('Delete this category?');">
+              <input type="hidden" name="csrf_token" value="{{ config.CSRF_TOKEN }}">
+            <button class="btn btn-sm btn-danger">Delete</button>
+        </form>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}
