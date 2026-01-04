@@ -1,0 +1,138 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}
+{% if post %}Edit{% else %}New{% endif %} Post
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+    {% if post %}Edit{% else %}New{% endif %} Post
+</h1>
+
+<form method="post" enctype="multipart/form-data">
+<input type="hidden" name="csrf_token" value="{{ config.CSRF_TOKEN }}">
+
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" name="title" class="form-control"
+               value="{{ post.title if post else '' }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Slug</label>
+        <input type="text"
+            name="slug"
+            class="form-control"
+            value="{{ post.slug if post else '' }}"
+            placeholder="auto-generated-if-empty">
+        <small class="text-muted">
+            Leave empty to auto-generate from title
+        </small>
+    </div>
+
+
+    <div class="mb-3">
+        <label class="form-label">Content</label>
+        <textarea name="content" rows="10" class="form-control" required>{{ post.content if post else '' }}</textarea>
+    </div>
+
+    <div class="mb-3">
+    <label class="form-label">Category</label>
+    <select name="category_id" class="form-select">
+        <option value="">-- None --</option>
+        {% for c in categories %}
+            <option value="{{ c.id }}"
+            {% if post and post.category_id == c.id %}selected{% endif %}>
+                {{ c.name }}
+            </option>
+        {% endfor %}
+    </select>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Tags (comma separated)</label>
+    <input name="tags" class="form-control"
+           value="{{ post.tags | map(attribute='name') | join(', ') if post else '' }}">
+</div>
+
+
+<hr>
+<h5>SEO</h5>
+
+<div class="mb-3">
+    <label class="form-label">Meta Title</label>
+    <input type="text" name="meta_title" class="form-control"
+           value="{{ post.meta_title if post else '' }}">
+    <small class="text-muted">
+        Leave empty to use post title
+    </small>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Meta Description</label>
+    <textarea name="meta_description" class="form-control" rows="3">{{ post.meta_description if post else '' }}</textarea>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Canonical URL</label>
+    <input type="url" name="canonical_url" class="form-control"
+           placeholder="https://example.com/original-post"
+           value="{{ post.canonical_url if post else '' }}">
+    <small class="text-muted">
+        Leave empty to use this post’s URL
+    </small>
+</div>
+
+
+<div class="form-check mb-3">
+    <input
+        class="form-check-input"
+        type="checkbox"
+        name="noindex"
+        value="1"
+        {% if post and post.noindex %}checked{% endif %}
+    >
+    <label class="form-check-label">
+        Noindex this post
+    </label>
+</div>
+
+<hr>
+<h5>Featured Image</h5>
+
+<div class="mb-3">
+    <label class="form-label">Upload Image (Local)</label>
+    <input type="file" name="featured_image" class="form-control">
+    {% if post and post.featured_image %}
+        <small class="text-muted">
+            Current: {{ post.featured_image }}
+        </small>
+    {% endif %}
+</div>
+
+<div class="mb-3">
+    <label class="form-label">External Image URL</label>
+    <input type="url" name="featured_image_external" class="form-control"
+           value="{{ post.featured_image_external if post else '' }}">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Image Alt Text</label>
+    <input type="text" name="image_alt" class="form-control"
+           value="{{ post.image_alt if post else '' }}">
+</div>
+
+
+
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+            <option value="draft" {% if post and post.status == "draft" %}selected{% endif %}>Draft</option>
+            <option value="published" {% if post and post.status == "published" %}selected{% endif %}>Published</option>
+        </select>
+    </div>
+
+    <button class="btn btn-success">Save</button>
+    <a href="{{ url_for('admin.posts') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
