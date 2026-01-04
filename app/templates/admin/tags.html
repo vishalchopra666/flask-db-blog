@@ -1,0 +1,18 @@
+{% extends "admin/layout.html" %}
+{% block title %}Tags{% endblock %}
+
+{% block content %}
+<h1>Tags</h1>
+
+<form method="post" class="mb-3">
+    <input type="hidden" name="csrf_token" value="{{ config.CSRF_TOKEN }}">
+    <input name="name" class="form-control" placeholder="Tag name" required>
+    <button class="btn btn-primary mt-2">Add</button>
+</form>
+
+<ul class="list-group">
+{% for t in tags %}
+    <li class="list-group-item">{{ t.name }}</li>
+{% endfor %}
+</ul>
+{% endblock %}
