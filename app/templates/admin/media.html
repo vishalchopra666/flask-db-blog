@@ -1,0 +1,62 @@
+{% extends "admin/layout.html" %}
+{% block title %}Media{% endblock %}
+
+{% block content %}
+<h1>Media Library</h1>
+
+<form method="post"
+      action="{{ url_for('admin.upload_media') }}"
+      enctype="multipart/form-data"
+      class="mb-4">
+    <input type="hidden" name="csrf_token" value="{{ config.CSRF_TOKEN }}">
+
+    <div class="input-group">
+        <input type="file"
+               name="image"
+               class="form-control"
+               accept="image/*"
+               required>
+
+        <button class="btn btn-primary">
+            Upload
+        </button>
+    </div>
+</form>
+
+<hr>
+
+{% if files %}
+<div class="row">
+    {% for file in files %}
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <img src="{{ url_for('static', filename='uploads/' + file) }}"
+                 class="card-img-top"
+                 style="height:150px; object-fit:cover;">
+            <div class="card-body">
+                <p class="small text-truncate">{{ file }}</p>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       value="{{ request.host_url }}static/uploads/{{ file }}"
+                       readonly
+                       onclick="this.select()">
+            </div>
+
+            <form method="post"
+                action="{{ url_for('admin.delete_media', filename=file) }}"
+                onsubmit="return confirm('Delete this image? This may break posts.');"
+                class="mt-2">
+                <input type="hidden" name="csrf_token" value="{{ config.CSRF_TOKEN }}">
+                <button class="btn btn-sm btn-danger w-100">
+                    Delete
+                </button>
+            </form>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No images uploaded yet.</p>
+{% endif %}
+{% endblock %}
