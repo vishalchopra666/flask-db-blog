@@ -30,6 +30,7 @@ This project focuses on:
 
 ## 📁 Project Structure
 
+'''
 Flask Blog/
 │
 ├── app/
@@ -46,7 +47,7 @@ Flask Blog/
 ├── config.py
 ├── run.py
 └── README.md
-
+'''
 
 
 ---
