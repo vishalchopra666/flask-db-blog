@@ -1,0 +1,35 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Posts{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+    <h1>Posts</h1>
+    <a href="{{ url_for('admin.new_post') }}" class="btn btn-primary">Add New</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Updated</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for post in posts %}
+        <tr>
+            <td>{{ post.title }}</td>
+            <td>{{ post.status }}</td>
+            <td>{{ post.updated_at.strftime("%Y-%m-%d") }}</td>
+            <td>
+                <a href="{{ url_for('admin.edit_post', post_id=post.id) }}" class="btn btn-sm btn-secondary">
+                    Edit
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
