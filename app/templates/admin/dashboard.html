@@ -1,0 +1,70 @@
+{% extends "admin/layout.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Dashboard</h1>
+
+<!-- TOP WIDGETS -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Posts</h5>
+                <p class="card-text fs-4">{{ total_posts }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Published</h5>
+                <p class="card-text fs-4">{{ published_posts }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Drafts</h5>
+                <p class="card-text fs-4">{{ draft_posts }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RECENT POSTS -->
+<div class="card">
+    <div class="card-header">
+        Recent Posts
+    </div>
+
+    <ul class="list-group list-group-flush">
+        {% if recent_posts %}
+            {% for post in recent_posts %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ post.title }}</strong>
+
+                        {% if post.status == "draft" %}
+                            <span class="badge bg-warning text-dark ms-2">Draft</span>
+                        {% else %}
+                            <span class="badge bg-success ms-2">Live</span>
+                        {% endif %}
+                    </div>
+
+                    <a href="{{ url_for('admin.edit_post', post_id=post.id) }}"
+                       class="btn btn-sm btn-outline-primary">
+                        Edit
+                    </a>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="list-group-item">
+                No posts yet.
+            </li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}
